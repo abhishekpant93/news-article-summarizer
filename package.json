@@ -1,0 +1,29 @@
+{
+  "name": "news-article-summarizer",
+  "version": "0.1.0",
+  "description": "A tool for automatic summarization of news articles",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "~3.4.x"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abhishekpant93/news-article-summarizer"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "author": "Abhishek Pant",
+  "contributors": [
+    "Utkarsh Jaiswal <ujaiswal.iit@gmail.com>"
+  ],
+  "license": "MIT"
+}
