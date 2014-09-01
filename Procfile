@@ -1,1 +1,1 @@
-web: node index.js
+web: gunicorn --pythonpath app app.wsgi:application --log-file -
