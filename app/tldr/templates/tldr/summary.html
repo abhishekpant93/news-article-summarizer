@@ -1,0 +1,99 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	    <!-- Meta, title, CSS, favicons, etc. -->
+	    <meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="TLDR News Summarizer">
+		<meta name="keywords" content="News article summarizer, Speech and Natural Language Processing">
+		<meta name="author" content="Group 6">
+
+		<!-- Bootstrap core CSS -->
+		<link href="{% static 'tldr/css/bootstrap.min.css' %}" rel="stylesheet">
+		<!-- Custom CSS -->
+		<link href="{% static 'tldr/css/style.css' %}" rel="stylesheet">
+		<title>
+			TLDR News Summarizer
+		</title>
+	</head>
+
+	<body>
+
+		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+			<div class="container-fluid">
+			    <div class="navbar-header">
+			      <button id="toggle_button" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			      </button>
+			      <a class="navbar-brand" href="{% url 'tldr:index' %}" >TLDR News Summarizer</a>
+			    </div>
+
+			    <div class="collapse navbar-collapse" id="navbar-collapse">
+			      <ul class="nav navbar-nav navbar-right">
+			      <li id="about_item" class=""><a id="about" onclick="$('#aboutModal').modal()" href="#">About</a></li>
+			      </ul>
+			    </div><!-- /.navbar-collapse -->
+			</div><!-- /.container-fluid -->
+		</nav>
+
+		<!-- Modal -->
+		<div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="aboutModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="aboutModalLabel">TLDR News Summarizer</h4>
+		      </div>
+		      <div class="modal-body">
+		        <b>Speech and Natural Language Processing project</b>
+		       <p>
+		        	Group 6: <br>
+		        	<ul>
+		        		<li><h6>Utkarsh Jaiswal (Group Leader)</h6></li>
+		        		<li><h6>Aniruddha Gupta</h6></li>
+		        		<li><h6>Ankit Jain</h6></li>
+		        		<li><h6>Bhaskar Bagchi</h6></li>
+		        		<li><h6>Shushman Chowdhary</h6></li>
+		        		<li><h6>Abhishek Pant</h6></li>
+		        		<li><h6>Rishi Rajiv Mehta</h6></li>
+		        	</ul>
+		        </p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<div class="container">
+			{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+			<label >Generated Summary:</label>
+			<div id="output_summary" class="well">
+				<ul>
+				{% if summary %}
+					{% for s in summary %}
+					    <li>{{ s }}</li>
+					{% endfor %}
+				{% endif %}
+				</ul>
+			</div>
+		</div><!-- /.container -->
+		<hr>
+		<div class="container">
+			<footer>
+				<b>Speech and Natural Language Processing, Department of Computer Science and Engineering, IIT Kharagpur</b>
+			</footer>
+		</div>
+
+		<!-- JQuery core javascript  -->
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<!-- Bootstrap core JavaScript -->
+		<script src="{% static 'tldr/js/bootstrap.min.js' %}"></script>
+	</body>
+</html>
+	
