@@ -36,6 +36,8 @@ def luhn_summarizer(document):
 	print word_frequency_dict
 
 	sentence_scores = [[0.0,x] for x in xrange(len(sentences))]
+	n_sentences = len(sentences)
+
 	for (i,sent) in enumerate(sentences):
 		sent_word_list = re.split(r'[,;.\s]\s*',sent)
 		if len(sent_word_list) <= 5: #Eliminate sentences of less than 5 words
@@ -73,16 +75,21 @@ def luhn_summarizer(document):
 				clusterSum=0
 		if clusterCount>0:
 			cluster_score.append(clusterSum/(clusterCount**2))
-		sentence_scores[i][0] = max(cluster_score)
+		sentence_scores[i][0] = 1.0/min(i+1,n_sentences-i) + max(cluster_score)
 
+	#Sorted_list is a list of two-member lists of (sentence score, index) sorted by score
 	sorted_list = sorted(sentence_scores,reverse=True)
 	topK = []
 
 	#Can swap out number_of_lines for fraction of article lines here
 	for i in xrange(number_of_lines):
+		#topK is a list of lists of (sentence index, score) with top k scores
 		topK.append([sorted_list[i][1],sorted_list[i][0]])
+	
+	#Final_sent_list is topK sorted by sentence index (sentences in order of appearance)
 	final_sent_list = sorted(topK)
 
+	#Print final chosen sentences
 	for sent_score in final_sent_list:
 		print sentences[sent_score[0]]
 
