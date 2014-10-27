@@ -8,9 +8,7 @@ from nltk.stem.lancaster import LancasterStemmer
 import re
 import operator
 
-number_of_lines = 5
-fraction_of_lines = 3
-take_fraction = True
+fraction_of_lines = 0.33
 
 def luhn_summarizer(document):
 
@@ -33,9 +31,9 @@ def luhn_summarizer(document):
 			if i!=0 and word[0].isupper()==True:
 				word_frequency_dict[stem_word] = word_frequency_dict[stem_word] + 0.2 #Adhoc weight
 
-	print word_frequency_dict
 
 	sentence_scores = [[0.0,x] for x in xrange(len(sentences))]
+	scores = [0.0 for x in xrange(len(sentences))]
 	n_sentences = len(sentences)
 
 	for (i,sent) in enumerate(sentences):
@@ -49,7 +47,6 @@ def luhn_summarizer(document):
 			if word.lower() in stop_words_list:
 				significance_vector.append(0)
 			stem_word = st.stem(word)
-			print stem_word
 			if stem_word in word_frequency_dict.keys():
 				stem_word_freq = word_frequency_dict[stem_word]
 			else:
@@ -58,7 +55,6 @@ def luhn_summarizer(document):
 				significance_vector.append(stem_word_freq)
 			else:
 				significance_vector.append(0)
-		print word_frequency_dict
 		cluster_score = []
 		blankCount = 0
 		clusterCount = 0
@@ -76,13 +72,14 @@ def luhn_summarizer(document):
 		if clusterCount>0:
 			cluster_score.append(clusterSum/(clusterCount**2))
 		sentence_scores[i][0] = 1.0/min(i+1,n_sentences-i) + max(cluster_score)
+		scores[i] = sentence_scores[i][0]
 
 	#Sorted_list is a list of two-member lists of (sentence score, index) sorted by score
 	sorted_list = sorted(sentence_scores,reverse=True)
 	topK = []
 
 	#Can swap out number_of_lines for fraction of article lines here
-	for i in xrange(number_of_lines):
+	for i in xrange(int(fraction_of_lines*n_sentences)):
 		#topK is a list of lists of (sentence index, score) with top k scores
 		topK.append([sorted_list[i][1],sorted_list[i][0]])
 	
@@ -92,6 +89,8 @@ def luhn_summarizer(document):
 	#Print final chosen sentences
 	for sent_score in final_sent_list:
 		print sentences[sent_score[0]]
+
+	return scores
 
 
 
