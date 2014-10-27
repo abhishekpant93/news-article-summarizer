@@ -46,6 +46,7 @@ def luhn_summarizer(document):
 				continue
 			if word.lower() in stop_words_list:
 				significance_vector.append(0)
+				continue
 			stem_word = st.stem(word)
 			if stem_word in word_frequency_dict.keys():
 				stem_word_freq = word_frequency_dict[stem_word]
