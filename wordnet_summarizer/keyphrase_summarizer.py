@@ -72,21 +72,26 @@ def summarize(body):
     trees = [chunker.parse(sent) for sent in body_pos]
     
     NP = {}
+    cnt = 0
     for tree in trees:
         for leaf_NP in leaves_NP(tree):
-            phrase = str(leaf_NP[0][0]).lower()
+            
+            phrase = ""
+            for word in leaf_NP:
+                phrase += str(word[0]).lower() + " "
+                
             if phrase in NP:
                 NP[phrase] += 1
             elif acceptable_phrase(phrase):
                 NP[phrase] = 1
-
+            
             if len(phrase.split()) > 1:
                 for word in phrase.split():
                     if word in NP:
                         NP[word] += 1.0 / len(phrase.split())
                     elif acceptable_phrase(word):
                         NP[word] = 1.0 / len(phrase.split())
-
+                        
     keyphrases = sorted(NP.items(), key=operator.itemgetter(1), reverse = True)[0 : NUM_NP+1]
     keyphrases = [(phrase[0], float(phrase[1]) / len(NP)) for phrase in keyphrases]
     print keyphrases, '\n'
@@ -97,7 +102,10 @@ def summarize(body):
         freq_phrases = {}
         freq_words = {}
         for leaf_NP in leaves_NP(tree):
-            phrase = str(leaf_NP[0][0]).lower()
+            phrase = ""
+            for word in leaf_NP:
+                phrase += str(word[0]).lower() + " "
+                
             if phrase in freq_phrases:
                 freq_phrases[phrase] += 1
             elif acceptable_phrase(phrase):
