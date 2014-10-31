@@ -5,7 +5,7 @@ from nltk.corpus import stopwords
 import operator
 import math
 
-TARGET_ARTICLE_PATH = '../test_articles/test_1.txt'
+TARGET_ARTICLE_PATH = '../test_articles/test_4.txt'
 NUM_NP = 10
 K = 10
 stopword_list = stopwords.words('english')
@@ -14,13 +14,12 @@ def read_article(path):
     fp = open(path)
     lines = fp.readlines()
 
-    headline = lines[0]
     body = ""
 
-    for line in lines[1:]:
-        body += line.rstrip('\n')
+    for line in lines:
+        body += line.rstrip('\n') + " "
 
-    return headline, body
+    return  body
 
 def preprocess(body):
     sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')    
@@ -28,7 +27,7 @@ def preprocess(body):
     body = sent_tokenizer.tokenize(body)
     body = [word_tokenize(sent) for sent in body]
     body = [nltk.pos_tag(sent) for sent in body]
-
+    
     return body
 
 def acceptable_phrase(phrase):
@@ -79,6 +78,7 @@ def summarize(body):
             phrase = ""
             for word in leaf_NP:
                 phrase += str(word[0]).lower() + " "
+            phrase = phrase.strip()
                 
             if phrase in NP:
                 NP[phrase] += 1
@@ -105,6 +105,7 @@ def summarize(body):
             phrase = ""
             for word in leaf_NP:
                 phrase += str(word[0]).lower() + " "
+            phrase = phrase.strip()
                 
             if phrase in freq_phrases:
                 freq_phrases[phrase] += 1
@@ -136,7 +137,7 @@ def summarize(body):
     
 def main():
     
-    headline, body = read_article(TARGET_ARTICLE_PATH)
+    body = read_article(TARGET_ARTICLE_PATH)
 
     summary = summarize(body)
     
