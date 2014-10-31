@@ -22,21 +22,14 @@ def read_article(path):
 
     return headline, body
 
-def preprocess(headline, body):
+def preprocess(body):
     sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')    
-
-    headline = word_tokenize(headline)
-    headline = nltk.pos_tag(headline)
 
     body = sent_tokenizer.tokenize(body)
     body = [word_tokenize(sent) for sent in body]
     body = [nltk.pos_tag(sent) for sent in body]
 
-    return headline, body
-
-def leaves_NP(tree):
-    for subtree in tree.subtrees(filter = lambda t: t.label()=='NP'):
-        yield subtree.leaves()
+    return body
 
 def acceptable_phrase(phrase):
     l = [word for word in phrase.split() if word not in stopword_list and len(word) > 3]
@@ -56,10 +49,14 @@ def get_score(keyphrases, freq_phrases, freq_words):
                 score += keyphrase[1] * math.sqrt(word[1])
                 break
     return score
-                
-def summarize(headline, body):
 
-    headline_pos, body_pos = preprocess(headline, body)
+def leaves_NP(tree):
+    for subtree in tree.subtrees(filter = lambda t: t.label()=='NP'):
+        yield subtree.leaves()
+        
+def summarize(body):
+
+    body_pos = preprocess(body)
         
     # grammar = "NP: {<DT>?<JJ>*<NN>}"
     grammar = r"""
@@ -73,7 +70,6 @@ def summarize(headline, body):
     """
     chunker = nltk.RegexpParser(grammar)
     trees = [chunker.parse(sent) for sent in body_pos]
-    trees.append(chunker.parse(headline_pos))
     
     NP = {}
     for tree in trees:
@@ -134,7 +130,8 @@ def main():
     
     headline, body = read_article(TARGET_ARTICLE_PATH)
 
-    summary = summarize(headline, body)
+    summary = summarize(body)
+    
     print '\n'                   
     for line in summary:
         print line, '\n'
