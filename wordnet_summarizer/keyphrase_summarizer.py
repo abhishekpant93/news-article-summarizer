@@ -94,9 +94,10 @@ def summarize(body):
                         
     keyphrases = sorted(NP.items(), key=operator.itemgetter(1), reverse = True)[0 : NUM_NP+1]
     keyphrases = [(phrase[0], float(phrase[1]) / len(NP)) for phrase in keyphrases]
-    print keyphrases, '\n'
+    # print keyphrases, '\n'
     
     scores_dict = {}
+    sent_score = [0.0 for x in trees]
     for i, tree in enumerate(trees):
         score = 0
         freq_phrases = {}
@@ -121,10 +122,11 @@ def summarize(body):
 
         score = get_score(keyphrases, freq_phrases, freq_words)
         scores_dict[i] = score
+        sent_score[i] = score
 
     scores = sorted(scores_dict.items(), key=operator.itemgetter(1), reverse = True)[0 : K + 1]
     scores = sorted(scores, key = operator.itemgetter(0))    
-    print '\n', scores, '\n'
+    # print '\n', scores, '\n'
     sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
     body_sent = sent_tokenizer.tokenize(body)
     summary = []
@@ -133,7 +135,8 @@ def summarize(body):
     for score in scores:
         summary.append((body_sent[score[0]], score[0], score[1]))
                        
-    return summary
+    #return summary
+    return sent_score
     
 def main():
     
@@ -145,4 +148,4 @@ def main():
     for line in summary:
         print line, '\n'
 
-main()
+# main()

@@ -88,8 +88,8 @@ def luhn_summarizer(document):
 	final_sent_list = sorted(topK)
 
 	#Print final chosen sentences
-	for sent_score in final_sent_list:
-		print sentences[sent_score[0]]
+	# for sent_score in final_sent_list:
+	# 	print sentences[sent_score[0]]
 
 	return scores
 

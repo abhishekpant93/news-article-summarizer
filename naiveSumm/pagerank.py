@@ -23,8 +23,12 @@ def textrank(document):
 	similarity_graph = normalized * normalized.T
 	nx_graph = nx.from_scipy_sparse_matrix(similarity_graph)
 	scores = nx.pagerank(nx_graph)
-	return  sorted(((scores[i],i,s) for i,s in enumerate(sentences)),
-	  reverse=True)
+	sent_score = [0.0 for x in xrange(len(scores))]
+	for i in xrange(len(scores)):
+		sent_score[i] = scores[i]
+	# return  sorted(((scores[i],i,s) for i,s in enumerate(sentences)),
+	  # reverse=True)
+	return sent_score
 
 def getTextOrderKey(item):
 	return item[1]

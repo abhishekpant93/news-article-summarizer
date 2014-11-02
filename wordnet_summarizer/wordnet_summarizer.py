@@ -124,6 +124,7 @@ def get_sentence_score(keyphrases, sent_phrases, sent_words):
     
 def get_sentence_scores(keyphrases, trees):
     scores_dict = {}
+    sent_scores = [0.0 for x in trees]
     for i, tree in enumerate(trees):
         score = 0
         freq_phrases = {}
@@ -148,8 +149,9 @@ def get_sentence_scores(keyphrases, trees):
 
         score = get_sentence_score(keyphrases, freq_phrases, freq_words)
         scores_dict[i] = score
+        sent_scores[i] = score
 
-    return scores_dict
+    return scores_dict, sent_scores
         
 def summarize(body):
 
@@ -157,13 +159,13 @@ def summarize(body):
     trees = get_NP_trees(body_pos)
     keyphrases = get_keyphrases(trees)
 
-    print keyphrases, '\n'
+    # print keyphrases, '\n'
 
-    scores_dict = get_sentence_scores(keyphrases, trees)
+    scores_dict, sent_scores = get_sentence_scores(keyphrases, trees)
     scores = sorted(scores_dict.items(), key=operator.itemgetter(1), reverse = True)[0 : K + 1]
     scores = sorted(scores, key = operator.itemgetter(0))    
 
-    print scores, '\n'
+    # print scores, '\n'
     
     sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
     body_sent = sent_tokenizer.tokenize(body)
@@ -174,7 +176,8 @@ def summarize(body):
     for score in scores:
         summary.append((body_sent[score[0]], score[0], score[1]))
                        
-    return summary
+    #return summary
+    return sent_scores
     
 def main():
     
@@ -186,4 +189,4 @@ def main():
     for line in summary:
         print line, '\n'
 
-main()
+# main()
