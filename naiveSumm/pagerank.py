@@ -28,6 +28,14 @@ def textrank(document):
 		sent_score[i] = scores[i]
 	# return  sorted(((scores[i],i,s) for i,s in enumerate(sentences)),
 	  # reverse=True)
+	# if len(sentences)/3>10:
+	# 	K = 10
+	# else:
+	# 	K = len(sentences)/3
+	# final = sorted(((scores[i],i,s) for i,s in enumerate(sentences)), reverse=True)[0 : K +1]
+	# print "Pagerank"
+	# for x in final:
+	# 	print x[2]
 	return sent_score
 
 def getTextOrderKey(item):

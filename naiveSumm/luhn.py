@@ -17,6 +17,12 @@ def luhn_summarizer(document):
 	sentences = sent_tokenize(document)
 	st = LancasterStemmer()
 	
+	if len(sentences)/3>10:
+		K = 10
+	else:
+		K = len(sentences)/3
+	K = K+1
+	
 	word_frequency_dict = dict()
 	for sent in sentences:
 		sent_word_list = re.split(r'[,;.\s]\s*',sent)
@@ -80,7 +86,7 @@ def luhn_summarizer(document):
 	topK = []
 
 	#Can swap out number_of_lines for fraction of article lines here
-	for i in xrange(int(fraction_of_lines*n_sentences)):
+	for i in xrange(K):
 		#topK is a list of lists of (sentence index, score) with top k scores
 		topK.append([sorted_list[i][1],sorted_list[i][0]])
 	
@@ -88,6 +94,7 @@ def luhn_summarizer(document):
 	final_sent_list = sorted(topK)
 
 	#Print final chosen sentences
+	# print "LUNH"
 	# for sent_score in final_sent_list:
 	# 	print sentences[sent_score[0]]
 

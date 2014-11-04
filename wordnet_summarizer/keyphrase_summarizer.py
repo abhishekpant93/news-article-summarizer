@@ -123,7 +123,11 @@ def summarize(body):
         score = get_score(keyphrases, freq_phrases, freq_words)
         scores_dict[i] = score
         sent_score[i] = score
-
+    if len(body_pos)/3>10:
+        K = 10
+    else:
+        K = len(body_pos)/3
+    K = K+1
     scores = sorted(scores_dict.items(), key=operator.itemgetter(1), reverse = True)[0 : K + 1]
     scores = sorted(scores, key = operator.itemgetter(0))    
     # print '\n', scores, '\n'
@@ -134,7 +138,8 @@ def summarize(body):
         summary.append((body_sent[0], 0, scores_dict[0]))
     for score in scores:
         summary.append((body_sent[score[0]], score[0], score[1]))
-                       
+    # print "Keyphrase"
+    # print summary                   
     #return summary
     return sent_score
     

@@ -8,7 +8,7 @@ import math
 
 TARGET_ARTICLE_PATH = '../test_articles/test_4.txt'
 NUM_NP = 10
-K = 10
+#K = 10
 stopword_list = stopwords.words('english')
 
 def read_article(path):
@@ -160,7 +160,11 @@ def summarize(body):
     keyphrases = get_keyphrases(trees)
 
     # print keyphrases, '\n'
-
+    if len(body_pos)/3>10:
+        K = 10
+    else:
+        K = len(body_pos)/3
+    K = K+1
     scores_dict, sent_scores = get_sentence_scores(keyphrases, trees)
     scores = sorted(scores_dict.items(), key=operator.itemgetter(1), reverse = True)[0 : K + 1]
     scores = sorted(scores, key = operator.itemgetter(0))    
@@ -177,6 +181,8 @@ def summarize(body):
         summary.append((body_sent[score[0]], score[0], score[1]))
                        
     #return summary
+    # print "Wordnet"
+    # print summary
     return sent_scores
     
 def main():

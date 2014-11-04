@@ -1,3 +1,8 @@
+import csv
+from pybrain.datasets import SupervisedDataSet
+from pybrain.tools.shortcuts import buildNetwork
+from pybrain.supervised.trainers import BackpropTrainer
+from pybrain.structure.modules import SoftmaxLayer
 import sys
 sys.path.insert(0, '../naiveSumm/')
 sys.path.insert(1, '../wordnet_summarizer/')
@@ -11,7 +16,8 @@ import operator
 
 
 
-TARGET_ARTICLE_PATH = '../test_articles/test_2.txt'
+TARGET_ARTICLE_PATH = '../test_articles/news9.article'
+DATABASE_PATH = '../resource/db.csv'
 
 NUMBER_OF_ARTICLES = 4.0
 WEIGHT_LUHN = 1 / NUMBER_OF_ARTICLES
@@ -45,6 +51,16 @@ def normalizeScores(scores):
 	return normalized;
 
 def main():
+	#training neural network using training dataset of manual summaries
+	ds = SupervisedDataSet(4, 1)
+	with open(DATABASE_PATH, 'rb') as f:
+		mycsv = csv.reader(f)
+		for row in mycsv:
+			ds.addSample((row[1], row[2], row[3], row[4]), (row[0],))
+	net = buildNetwork(4, 2, 1, bias=True, hiddenclass=SoftmaxLayer) #MDLSTMLayer) #LSTMLayer) #LinearLayer) #GaussianLayer) #SigmoidLayer)#TanhLayer)
+	trainer = BackpropTrainer(net, ds)
+	trainError = trainer.train()
+
 	document = read_article(TARGET_ARTICLE_PATH)
 	sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
 	body_sent = sent_tokenizer.tokenize(document)
@@ -74,7 +90,9 @@ def main():
 	# print normalized_scores_wordnet;
 	total_score = {}#[0.0 for x in scores_luhn]
 	for i in xrange(len(body_sent)):
-		total_score[i] = (normalized_scores_luhn[i] * WEIGHT_LUHN) + (normalized_scores_keyphrase[i] * WEIGHT_KEYPHRASE) + (normalized_scores_wordnet[i] * WEIGHT_WORDNET) + (normalized_scores_pagerank[i] * WEIGHT_PAGERANK)
+		temp = net.activate([normalized_scores_pagerank[i], normalized_scores_luhn[i], normalized_scores_keyphrase[i], normalized_scores_wordnet[i]])
+		total_score[i] = temp[0]
+		#total_score[i] = (normalized_scores_luhn[i] * WEIGHT_LUHN) + (normalized_scores_keyphrase[i] * WEIGHT_KEYPHRASE) + (normalized_scores_wordnet[i] * WEIGHT_WORDNET) + (normalized_scores_pagerank[i] * WEIGHT_PAGERANK)
 	# print '\nTotal Scores\n'
 	# print total_score
 	scores = sorted(total_score.items(), key=operator.itemgetter(1), reverse = True)[0 : K + 1]
@@ -89,6 +107,7 @@ def main():
 	summary_string = ''
 	for element in summary:
 		summary_string+=element
+	print "Final Summary"
 	print summary_string
 	
 main()
