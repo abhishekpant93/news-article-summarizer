@@ -5,9 +5,9 @@ from nltk.corpus import stopwords
 import operator
 import math
 
-DEBUG = False
+DEBUG = True
 
-TARGET_ARTICLE_PATH = '../test_articles/test_4.txt'
+TARGET_ARTICLE_PATH = '../test_articles/test_1.txt'
 NUM_NP = 10
 K = 10
 stopword_list = stopwords.words('english')
@@ -35,6 +35,14 @@ def preprocess(body):
 def acceptable_phrase(phrase):
     l = [word for word in phrase.split() if word not in stopword_list and len(word) > 3]
     return len(l) > 0
+
+def cleaned_phrase(phrase):
+    cleaned = ""
+    for word in phrase.split():
+        if acceptable_phrase(word):
+            cleaned = word + " "
+    cleaned = cleaned.strip()
+    return cleaned
     
 def get_score(keyphrases, freq_phrases, freq_words):
     score = 0
@@ -49,6 +57,8 @@ def get_score(keyphrases, freq_phrases, freq_words):
             if word[0] == keyphrase[0]:
                 score += keyphrase[1] * math.sqrt(word[1])
                 break
+    # if DEBUG:
+    #     print freq_phrases, ' | ', freq_words, ' | ', score            
     return score
 
 def leaves_NP(tree):
@@ -81,7 +91,8 @@ def summarize(body):
             for word in leaf_NP:
                 phrase += str(word[0]).lower() + " "
             phrase = phrase.strip()
-                
+            phrase = cleaned_phrase(phrase)
+            
             if phrase in NP:
                 NP[phrase] += 1
             elif acceptable_phrase(phrase):
@@ -110,7 +121,8 @@ def summarize(body):
             for word in leaf_NP:
                 phrase += str(word[0]).lower() + " "
             phrase = phrase.strip()
-                
+            phrase = cleaned_phrase(phrase)
+            
             if phrase in freq_phrases:
                 freq_phrases[phrase] += 1
             elif acceptable_phrase(phrase):
@@ -122,19 +134,33 @@ def summarize(body):
                         freq_words[word] += 1
                     elif acceptable_phrase(word):
                         freq_words[word] = 1
-
         score = get_score(keyphrases, freq_phrases, freq_words)
         scores_dict[i] = score
         sent_score[i] = score
+        
     if len(body_pos)/3>10:
         K = 10
     else:
         K = len(body_pos)/3
     K = K+1
     scores = sorted(scores_dict.items(), key=operator.itemgetter(1), reverse = True)[0 : K + 1]
-    scores = sorted(scores, key = operator.itemgetter(0))    
+
+    # contains_first = True if len([score for score in scores if score[0] == 0]) > 0 else False
+    # if DEBUG:
+    #     print 'contains first: ', contains_first
+    #     #print scores_dict
+    # if not contains_first:
+    #     if DEBUG:
+    #         print 'setting score for sent 0 = score for sent ', scores[K][0], ' = ', scores[K][1], ' (orig score for sent 0 =  ', scores_dict[0], ')'
+    #     sent_score[0] = scores[K][1]
+    #     scores_dict[0] = scores[K][1]    
+    #     scores[K] = (0, scores[K][1])
+        
+    scores = sorted(scores, key = operator.itemgetter(0))
+
     if DEBUG:
         print '\n', scores, '\n'
+        
     sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
     body_sent = sent_tokenizer.tokenize(body)
     summary = []
@@ -144,7 +170,8 @@ def summarize(body):
         summary.append((body_sent[score[0]], score[0], score[1]))
     if DEBUG:
         print "Keyphrase"
-        print summary                   
+        for line in summary:
+            print line                   
     #return summary
     return sent_score
     
@@ -154,8 +181,9 @@ def main():
 
     summary = summarize(body)
     
-    print '\n'                   
-    for line in summary:
-        print line, '\n'
+    # print '\n'                   
+    # for line in summary:
+    #     print line, '\n'
 
-# main()
+if DEBUG:
+    main()

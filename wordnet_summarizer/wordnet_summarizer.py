@@ -6,12 +6,12 @@ from nltk.corpus import wordnet as wn
 import operator
 import math
 
-TARGET_ARTICLE_PATH = '../test_articles/test_4.txt'
+TARGET_ARTICLE_PATH = '../test_articles/test_1.txt'
 NUM_NP = 10
 #K = 10
 stopword_list = stopwords.words('english')
 
-DEBUG = False
+DEBUG = True
 
 def read_article(path):
     fp = open(path)
@@ -37,6 +37,14 @@ def preprocess(body):
 def acceptable_phrase(phrase):
     l = [word for word in phrase.split() if word not in stopword_list and len(word) > 3]
     return len(l) > 0
+
+def cleaned_phrase(phrase):
+    cleaned = ""
+    for word in phrase.split():
+        if acceptable_phrase(word):
+            cleaned = word + " "
+    cleaned = cleaned.strip()
+    return cleaned
     
 def leaves_NP(tree):
     for subtree in tree.subtrees(filter = lambda t: t.label()=='NP'):
@@ -65,6 +73,7 @@ def get_keyphrases(NP_trees):
             for word in leaf_NP:
                 phrase += str(word[0]).lower() + " "
             phrase = phrase.strip()
+            phrase = cleaned_phrase(phrase)
             
             if phrase in NP:
                 NP[phrase] += 1
@@ -99,8 +108,8 @@ def compute_similarity(phrase1, phrase2):
 
     if match is None:
         match = 0
-    if DEBUG:
-        print 'match between ', phrase1, ' & ', phrase2, ': ', match
+    # if DEBUG:
+    #     print 'match between ', phrase1, ' & ', phrase2, ': ', match
     return match
                 
 def get_sentence_score(keyphrases, sent_phrases, sent_words):
@@ -120,7 +129,9 @@ def get_sentence_score(keyphrases, sent_phrases, sent_words):
                     score_words += max(kp[1] * compute_similarity(word, kp[0]) * math.sqrt(sent_words[word]) for kp in keyphrases)
             score += score_words
             #print 'score_words = ', score_words    
-        
+    #if DEBUG:
+    #    print sent_phrases, ' | ', sent_words, ' | ', score            
+
     #print 'score: ', score
     #print '\n'
     return score
@@ -137,7 +148,8 @@ def get_sentence_scores(keyphrases, trees):
             for word in leaf_NP:
                 phrase += str(word[0]).lower() + " "
             phrase = phrase.strip()
-                
+            phrase = cleaned_phrase(phrase)
+            
             if phrase in freq_phrases:
                 freq_phrases[phrase] += 1
             elif acceptable_phrase(phrase):
@@ -172,14 +184,25 @@ def summarize(body):
     K = K+1
     scores_dict, sent_scores = get_sentence_scores(keyphrases, trees)
     scores = sorted(scores_dict.items(), key=operator.itemgetter(1), reverse = True)[0 : K + 1]
-    scores = sorted(scores, key = operator.itemgetter(0))    
 
+    # contains_first = True if len([score for score in scores if score[0] == 0]) > 0 else False
+    # if DEBUG:
+    #     print 'contains first: ', contains_first
+    #     #print scores_dict
+    # if not contains_first:
+    #     if DEBUG:
+    #         print 'setting score for sent 0 = score for sent ', scores[K][0], ' = ', scores[K][1], ' (orig score for sent 0 = ', scores_dict[0] , ')'
+    #     sent_scores[0] = scores[K][1]
+    #     scores_dict[0] = scores[K][1]    
+    #     scores[K] = (0, scores[K][1])
+        
+    scores = sorted(scores, key = operator.itemgetter(0))    
     if DEBUG:
         print scores, '\n'
     
     sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
     body_sent = sent_tokenizer.tokenize(body)
-
+    
     summary = []
     if scores[0][0] != 0:
         summary.append((body_sent[0], 0, scores_dict[0]))
@@ -189,7 +212,8 @@ def summarize(body):
     #return summary
     if DEBUG:
         print "Wordnet"
-        print summary
+        for line in summary:
+            print line
         
     return sent_scores
     
@@ -199,8 +223,9 @@ def main():
 
     summary = summarize(body)
     
-    print '\n'                   
-    for line in summary:
-        print line, '\n'
+    # print '\n'                   
+    # for line in summary:
+    #     print line, '\n'
 
-# main()
+if DEBUG:
+    main()
