@@ -5,6 +5,8 @@ from nltk.corpus import stopwords
 import operator
 import math
 
+DEBUG = False
+
 TARGET_ARTICLE_PATH = '../test_articles/test_4.txt'
 NUM_NP = 10
 K = 10
@@ -94,7 +96,8 @@ def summarize(body):
                         
     keyphrases = sorted(NP.items(), key=operator.itemgetter(1), reverse = True)[0 : NUM_NP+1]
     keyphrases = [(phrase[0], float(phrase[1]) / len(NP)) for phrase in keyphrases]
-    # print keyphrases, '\n'
+    if DEBUG:
+        print keyphrases, '\n'
     
     scores_dict = {}
     sent_score = [0.0 for x in trees]
@@ -130,7 +133,8 @@ def summarize(body):
     K = K+1
     scores = sorted(scores_dict.items(), key=operator.itemgetter(1), reverse = True)[0 : K + 1]
     scores = sorted(scores, key = operator.itemgetter(0))    
-    # print '\n', scores, '\n'
+    if DEBUG:
+        print '\n', scores, '\n'
     sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
     body_sent = sent_tokenizer.tokenize(body)
     summary = []
@@ -138,8 +142,9 @@ def summarize(body):
         summary.append((body_sent[0], 0, scores_dict[0]))
     for score in scores:
         summary.append((body_sent[score[0]], score[0], score[1]))
-    # print "Keyphrase"
-    # print summary                   
+    if DEBUG:
+        print "Keyphrase"
+        print summary                   
     #return summary
     return sent_score
     

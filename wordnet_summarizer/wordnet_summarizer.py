@@ -11,6 +11,8 @@ NUM_NP = 10
 #K = 10
 stopword_list = stopwords.words('english')
 
+DEBUG = False
+
 def read_article(path):
     fp = open(path)
     lines = fp.readlines()
@@ -96,8 +98,9 @@ def compute_similarity(phrase1, phrase2):
         match = 0    
 
     if match is None:
-        match = 0    
-    #print 'match between ', phrase1, ' & ', phrase2, ': ', match
+        match = 0
+    if DEBUG:
+        print 'match between ', phrase1, ' & ', phrase2, ': ', match
     return match
                 
 def get_sentence_score(keyphrases, sent_phrases, sent_words):
@@ -159,7 +162,9 @@ def summarize(body):
     trees = get_NP_trees(body_pos)
     keyphrases = get_keyphrases(trees)
 
-    # print keyphrases, '\n'
+    if DEBUG:
+        print keyphrases, '\n'
+        
     if len(body_pos)/3>10:
         K = 10
     else:
@@ -169,7 +174,8 @@ def summarize(body):
     scores = sorted(scores_dict.items(), key=operator.itemgetter(1), reverse = True)[0 : K + 1]
     scores = sorted(scores, key = operator.itemgetter(0))    
 
-    # print scores, '\n'
+    if DEBUG:
+        print scores, '\n'
     
     sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
     body_sent = sent_tokenizer.tokenize(body)
@@ -181,8 +187,10 @@ def summarize(body):
         summary.append((body_sent[score[0]], score[0], score[1]))
                        
     #return summary
-    # print "Wordnet"
-    # print summary
+    if DEBUG:
+        print "Wordnet"
+        print summary
+        
     return sent_scores
     
 def main():

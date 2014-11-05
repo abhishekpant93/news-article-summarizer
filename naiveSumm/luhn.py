@@ -8,6 +8,7 @@ from nltk.stem.lancaster import LancasterStemmer
 import re
 import operator
 
+DEBUG = False
 fraction_of_lines = 0.33
 
 def luhn_summarizer(document):
@@ -94,9 +95,10 @@ def luhn_summarizer(document):
 	final_sent_list = sorted(topK)
 
 	#Print final chosen sentences
-	# print "LUNH"
-	# for sent_score in final_sent_list:
-	# 	print sentences[sent_score[0]]
+	if DEBUG:
+                print "LUHN"
+                for sent_score in final_sent_list:
+                        print sentences[sent_score[0]]
 
 	return scores
 
