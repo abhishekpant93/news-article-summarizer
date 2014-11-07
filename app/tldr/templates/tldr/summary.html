@@ -71,9 +71,9 @@
 		</div>
 
 		<div class="container">
-			{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 			<label >Generated Summary:</label>
 			<div id="output_summary" class="well">
+			{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 				<ul>
 				{% if summary %}
 					{% for s in summary %}

@@ -12,6 +12,7 @@
 	"declarativeContent",
 	"http://www.nytimes.com/*",
 	"http://news.yahoo.com/*",
+    "http://localhost:8000/*",
 	"tabs"
     ],
 

@@ -72,10 +72,10 @@
 
 		<div class="container">
 			{% if error_message %}<div class="well"><strong>{{ error_message }}</strong></div>{% endif %}
-			<form class="form-horizontal" role="form" action="{% url 'tldr:summary' %}" method="post">
+			<form class="form-horizontal" role="form" action="{% url 'tldr:summarize' %}" method="post">
 			{% csrf_token %}
 				<div class="form-group">
-					<label for="input_news_article" class="col-sm-2 control-label">Copy news article here:</label>
+					<label for="input_news_article" class="col-sm-2 control-label">News article:</label>
 					<div class="col-sm-10">
 						<textarea id="input_news_article" name="news_article" class="form-control" rows="20"></textarea>
 					</div>

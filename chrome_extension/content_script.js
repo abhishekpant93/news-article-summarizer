@@ -22,11 +22,19 @@ function flipSummaryDisplay(div) {
 
 function sendRequest(url) {
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "<insert url here>", true);
+    xhr.open("POST", "http://localhost:8000/summary_api/", true);
     xhr.onreadystatechange = function() {
 	if (xhr.readyState == 4 && xhr.status == 200) {
 	    var summary = xhr.responseText;
-	    showSummary(summary);
+        arr = summary.split('@');
+        title = 'Summary';
+        if(arr.length > 1) {
+            title = arr[0];
+            summary = arr[1];
+            console.log('title: ' + title);
+            console.log('summary: ' + summary);
+        }
+	    showSummary(summary, title);
 	}
     }
     var pos = url.indexOf(".html");
@@ -34,6 +42,7 @@ function sendRequest(url) {
     {
         url = url.substring(0,pos + 5);
     }
+    xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xhr.send("url=" + url);
 }
 
@@ -58,7 +67,7 @@ If Senate Republicans follow the path of their House counterparts, he could be f
 }
 
 function requestSummary() {
-    getArticleSummary();
+    sendRequest(document.URL);
 }
 
 function makeUl(summaryText) {

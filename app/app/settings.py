@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '6bo(d!vlutvvgf0gxtn$-82@a&bi9g^2*5h+1iz6k5maa163s$'
+SECRET_KEY = ')l)__dsxvp^-c(*dx=4%!lu&!*^b!h_l$@2afctw^#6wd4pj&x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tldr',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -80,3 +81,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Cache
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+
+# Session Engine
+SESSION_ENGINE = "django.contrib.sessions.backends.cache" 
