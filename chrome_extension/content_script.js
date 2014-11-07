@@ -35,10 +35,10 @@ function sendRequest(url) {
 function getArticleSummary() {
     url = document.URL;
     //sendRequest(url);
-    var hardcodedArticle = "This is some hardcoded stuff. For someone who\'s only used it twice, President Obama may need some reacquainting with the last remaining weapon in Democrats\' arsenal. He last rejected a bill from Congress in 2010.\
-But he\'s had blocking from a Democratic Senate majority until now. They\'ve stood in the way of bills most Democrats would oppose. Things are likely to change in JanuarRepublicans take charge of the Senate.\
-If Senate Republicans follow the path of their House counterparts, he could be faced with proposals to repeal Obamacare and budgets that cut entitlement programs - the type of bills that will meet a quick end at the other end of Pennsylvania Avenue.who\'s only used it twice, President Obama may need some reacquainting with the last remaining weapon in Democrats\' arsenal. He last rejected a bill from Congress in 2010.\
-But he\'s had blocking from a Democratic Senate majority until now. They\'ve stood in the way of bills most Democrats would oppose. Things are likely to change in January, when Republicans take charge of the Senate.\
+    var hardcodedArticle = "This is some hardcoded stuff. ~For someone who\'s only used it twice, President Obama may need some reacquainting with the last remaining weapon in Democrats\' arsenal.~ He last rejected a bill from Congress in 2010.~\
+But he\'s had blocking from a Democratic Senate majority until now. ~They\'ve stood in the way of bills most Democrats would oppose.~ Things are likely to change in JanuarRepublicans take charge of the Senate.~\
+If Senate Republicans follow the path of their House counterparts, he could be faced with proposals to repeal Obamacare and budgets that cut entitlement programs - the type of bills that will meet a quick end at the other end of Pennsylvania Avenue.~who\'s only used it twice, President Obama may need some reacquainting with the last remaining weapon in Democrats\' arsenal.~ He last rejected a bill from Congress in 2010.~\
+But he\'s had blocking from a Democratic Senate majority until now.~ They\'ve stood in the way of bills most Democrats would oppose.~ Things are likely to change in January, when Republicans take charge of the Senate. ~\
 If Senate Republicans follow the path of their House counterparts, he could be faced with proposals to repeal Obamacare and budgets that cut entitlement programs - the type of bills that will meet a quick end at the other end of Pennsylvania Avenue.";
     var titleArr = document.getElementsByClassName('headline');
     var title = "";
@@ -56,10 +56,23 @@ function requestSummary() {
     getArticleSummary();
 }
 
+function makeUl(summaryText) {
+    var ret = '<ul style="list-style-type: lower-greek;">';
+    sentenceArr = summaryText.split('~');
+    for(i = 0; i < sentenceArr.length; i++) {
+	ret += '<li>';
+	ret += sentenceArr[i];
+	ret += '</li>';
+    }
+    ret += "</ul>";
+    return ret;
+}
+
 function showSummary(summary, title) {
     var newDiv = document.createElement('div');
     newDiv.id = "TLDR_blanket";
     newDiv.className="tb-container";
+    summary = makeUl(summary);
     var html = '\
 <div class="TLDR_content tb-container" style="\
 width: 50%;\
