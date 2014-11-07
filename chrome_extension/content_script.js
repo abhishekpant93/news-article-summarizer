@@ -29,6 +29,11 @@ function sendRequest(url) {
 	    showSummary(summary);
 	}
     }
+    var pos = url.indexOf(".html");
+    if(pos != -1)
+    {
+        url = url.substring(0,pos + 5);
+    }
     xhr.send("url=" + url);
 }
 
