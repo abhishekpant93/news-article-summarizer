@@ -36,7 +36,7 @@ def community(document):
     #n gives the number of sub graphs
 	edge_wts = nx_graph.edges(data=True)
 	edge_wts.sort(key=lambda (a, b, dct): dct['weight'],reverse=True)
-	k = 10
+	k = 10 #number of sentence in summary
 	G = nx.Graph()
 	for i in nx_graph.nodes():
 		G.add_node(i)
@@ -58,7 +58,9 @@ def community(document):
 		for j in range(len(arr)):
 			inSummary[arr[j]] = scores[j];
 	# print inSummary
-	return inSummary
+	summ = [sentences[i] for i in range(len(inSummary)) if inSummary[i]>=1]
+	# print len(summ)
+	return summ
 		
 
 			
