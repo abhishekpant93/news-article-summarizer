@@ -16,11 +16,11 @@ def textrank(sentences):
 	scores = nx.pagerank(nx_graph)
 	# print scores[0]
 	scores = [scores[i] for i in range(len(scores))]
-	if(len(scores)>1):
+	if(not(max(scores)==min(scores))):
 		mi = min(scores)
 		scores = [i- mi for i in (scores)]
-		ma = max(scores)
-		scores = [i/ma for i in (scores)]
+	ma = max(scores)
+	scores = [i/ma for i in (scores)]
 	  # reverse=True)
 	# print sortedSencence[0][1]
 	# print scores
