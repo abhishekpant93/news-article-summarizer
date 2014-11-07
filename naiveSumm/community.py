@@ -14,10 +14,17 @@ def textrank(sentences):
 	similarity_graph = normalized * normalized.T
 	nx_graph = nx.from_scipy_sparse_matrix(similarity_graph)
 	scores = nx.pagerank(nx_graph)
-	sortedSencence =  sorted(((scores[i],i,s) for i,s in enumerate(sentences)),
-	  reverse=True)
+	# print scores[0]
+	scores = [scores[i] for i in range(len(scores))]
+	if(len(scores)>1):
+		mi = min(scores)
+		scores = [i- mi for i in (scores)]
+		ma = max(scores)
+		scores = [i/ma for i in (scores)]
+	  # reverse=True)
 	# print sortedSencence[0][1]
- 	return sortedSencence[0][1]
+	# print scores
+ 	return scores
 
 def community(document):
 	sentences = sent_tokenize(document) 
@@ -45,9 +52,13 @@ def community(document):
 	for i in range(n):
 		sen = [sentences[j] for j in (sub_graphs[i].nodes())]
 		arr = [j for j in (sub_graphs[i].nodes())]
-		k = textrank(sen)
-		inSummary[arr[k]] = 1;
-	for i in range(len(sentences)):
+		scores = textrank(sen)
+		# print (scores)
+		# print (arr)
+		for j in range(len(arr)):
+			inSummary[arr[j]] = scores[j];
+	# print inSummary
+	return inSummary
 		
 
 			
