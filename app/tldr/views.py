@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
-from tldr.utils import PageRankSummarizer, LuhnSummarizer, KeyPhraseSummarizer, CommunitySummarizer, ArticleExtractor
+from tldr.utils import PageRankSummarizer, LuhnSummarizer, KeyPhraseSummarizer, CommunitySummarizer, ArticleExtractor, CombinedSummarizer
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
@@ -14,7 +14,7 @@ def summarize(request):
 	else:
 		news_article = request.POST['news_article']
 		news_article = ArticleExtractor.filter_unicode(news_article)
-		summary = KeyPhraseSummarizer.summarize(news_article);
+		summary = CombinedSummarizer.summarize(news_article);
 		request.session['summary'] = summary
 		return HttpResponseRedirect(reverse('tldr:summary', args=()))
 
@@ -33,7 +33,7 @@ def summary_api(request):
 	else:
 		url = request.POST['url']
 		news_article = ArticleExtractor.parse(url)
-		summary = KeyPhraseSummarizer.summarize(news_article['text']);
+		summary = CombinedSummarizer.summarize(news_article['text']);
 		request.session['title'] = news_article['headline']
 		request.session['summary'] = summary
 		return HttpResponseRedirect(reverse('tldr:api_result', args=()))

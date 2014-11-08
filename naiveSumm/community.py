@@ -58,8 +58,8 @@ def community(document):
 		for j in range(len(arr)):
 			inSummary[arr[j]] = scores[j];
 	# print inSummary
-	summ = [sentences[i] for i in range(len(inSummary)) if inSummary[i]>=1]
-	# print len(summ)
+	summ = [(sentences[i],inSummary[i]) for i in range(len(inSummary)) ]
+	# print summ[0]
 	return summ
 		
 

@@ -173,7 +173,9 @@ def summarize(body):
         for line in summary:
             print line                   
     #return summary
-    return sent_score
+    sentences = sent_tokenizer.tokenize(body)
+    #return sent_score
+    return [(sentences[i], scores_dict[i]) for i in xrange(len(sentences))]
     
 def main():
     

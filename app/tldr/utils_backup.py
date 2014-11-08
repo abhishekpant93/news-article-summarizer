@@ -20,41 +20,6 @@ proxies = {
   "https": "http://10.3.100.207:8080",
 }
 
-class CombinedSummarizer():
-
-	@staticmethod
-	def summarize(document):
-		w_a = 0.0
-		w_b = 0.0
-		w_c = 0.0
-		w_d = 1.0
-
-		a = PageRankSummarizer.summarize(document)
-		b = LuhnSummarizer.summarize(document)
-		c = CommunitySummarizer.summarize(document)
-		d = KeyPhraseSummarizer.summarize(document)
-
-		sentences = [sentence[0] for sentence in a]
-		a_score = [w_a * score[1] for score in a]
-		b_score = [w_b * score[1] for score in b]
-		c_score = [w_c * score[1] for score in c]
-		d_score = [w_d * score[1] for score in d]
-		combined_score = [sa + sb + sc + sd for sa,sb,sc,sd in zip(a_score,b_score,c_score,d_score)]
-
-		final_sentences_and_score = zip(sentences, combined_score)
-		final_sentences_and_score = sorted(final_sentences_and_score, key=lambda tup: tup[1], reverse=True)
-
-		K = len(final_sentences_and_score)
-
-		summary = []
-		if K > 5:
-			summary = [final_sentences_and_score[i][0] for i in xrange(5)]
-		else:
-			summary = [final_sentences_and_score[i][0] for i in xrange(1 + K / 3)]
-
-		return summary
-
-
 class ArticleExtractor():
 
 	@staticmethod
@@ -103,7 +68,7 @@ class CommunitySummarizer():
 		similarity_graph = normalized * normalized.T
 		nx_graph = nx.from_scipy_sparse_matrix(similarity_graph)
 		sub_graphs = []
-		#n gives the number of sub graphs
+	    #n gives the number of sub graphs
 		edge_wts = nx_graph.edges(data=True)
 		edge_wts.sort(key=lambda (a, b, dct): dct['weight'],reverse=True)
 		k = 10 #number of sentence in summary
@@ -128,8 +93,7 @@ class CommunitySummarizer():
 			for j in range(len(arr)):
 				inSummary[arr[j]] = scores[j];
 		# print inSummary
-		# summ = [sentences[i] for i in range(len(inSummary)) if inSummary[i]>=1]
-		summ = [(sentences[i],inSummary[i]) for i in range(len(inSummary)) ]
+		summ = [sentences[i] for i in range(len(inSummary)) if inSummary[i]>=1]
 		# print len(summ)
 		return summ
 
@@ -256,8 +220,8 @@ class KeyPhraseSummarizer():
 			scores_dict[i] = score
 			sent_score[i] = score
 			
-		if len(body_pos)/3>5:
-			KeyPhraseSummarizer.K = 5
+		if len(body_pos)/3>4:
+			KeyPhraseSummarizer.K = 4
 		else:
 			KeyPhraseSummarizer.K = len(body_pos)/3
 			
@@ -273,10 +237,7 @@ class KeyPhraseSummarizer():
 		for score in scores:
 			summary.append((body_sent[score[0]], score[0], score[1]))
 		#return summary
-		#return [sent[0] for sent in summary]
-		sentences = sent_tokenizer.tokenize(body)				   
-		#return sent_score
-		return [(sentences[i], scores_dict[i]) for i in xrange(len(sentences))]
+		return [sent[0] for sent in summary]
 			
 
 class LuhnSummarizer():
@@ -354,11 +315,24 @@ class LuhnSummarizer():
 				cluster_score.append(clusterSum/(clusterCount**2))
 			sentence_scores[i][0] = 1.0/min(i+1,n_sentences-i) + max(cluster_score)
 			scores[i] = sentence_scores[i][0]
-			max_score = max(scores)
 
-		sentences_and_scores = [[sentences[i], scores[i] / max_score ] for i in xrange(len(sentences))]
+		#Sorted_list is a list of two-member lists of (sentence score, index) sorted by score
+		sorted_list = sorted(sentence_scores,reverse=True)
+		topK = []
 
-		return sentences_and_scores
+		#Can swap out number_of_lines for fraction of article lines here
+		for i in xrange(K):
+			#topK is a list of lists of (sentence index, score) with top k scores
+			topK.append([sorted_list[i][1],sorted_list[i][0]])
+		
+		#Final_sent_list is topK sorted by sentence index (sentences in order of appearance)
+		final_sent_list = sorted(topK)
+
+		summary = []
+		for sent_score in final_sent_list:
+			summary.append(sentences[sent_score[0]])
+
+		return summary
 
 
 class PageRankSummarizer():
@@ -375,9 +349,8 @@ class PageRankSummarizer():
 		similarity_graph = normalized * normalized.T
 		nx_graph = nx.from_scipy_sparse_matrix(similarity_graph)
 		scores = nx.pagerank(nx_graph)
-		# return  sorted(((scores[i],i,s) for i,s in enumerate(sentences)),
-		#   reverse=True)
-		return [(s,scores[i]) for i,s in enumerate(sentences)];
+		return  sorted(((scores[i],i,s) for i,s in enumerate(sentences)),
+		  reverse=True)
 
 	@staticmethod
 	def getScore(item):
@@ -395,18 +368,18 @@ class PageRankSummarizer():
 	def summarize(document):
 		topK=0
 		sortedSencence = PageRankSummarizer.textrank(document)
-		return sortedSencence
-		# if PageRankSummarizer.takeFraction:
-		# 	topK = int(math.ceil(PageRankSummarizer.fractionOfLines*len(sortedSencence)))
-		# else:
-		# 	if(PageRankSummarizer.numberOfLines>len(sortedSencence)):
-		# 		topK=len(sortedSencence)
-		# 	else:
-		# 		topK=PageRankSummarizer.numberOfLines
-		# # print topK
-		# del(sortedSencence[topK:])
-		# values =  sorted(sortedSencence, key=PageRankSummarizer.getTextOrderKey)
-		# result = [ PageRankSummarizer.getText(sentence) for sentence in values]
-		# del values
-		# return result
+
+		if PageRankSummarizer.takeFraction:
+			topK = int(math.ceil(PageRankSummarizer.fractionOfLines*len(sortedSencence)))
+		else:
+			if(PageRankSummarizer.numberOfLines>len(sortedSencence)):
+				topK=len(sortedSencence)
+			else:
+				topK=PageRankSummarizer.numberOfLines
+		# print topK
+		del(sortedSencence[topK:])
+		values =  sorted(sortedSencence, key=PageRankSummarizer.getTextOrderKey)
+		result = [ PageRankSummarizer.getText(sentence) for sentence in values]
+		del values
+		return result
 

@@ -16,6 +16,10 @@
 	"tabs"
     ],
 
+     "web_accessible_resources": [
+    "circle-loading-animation.gif"
+  ],
+
     "page_action": {
 	"default_icon": "icon.png",
 	"default_title": "We're on a news site"

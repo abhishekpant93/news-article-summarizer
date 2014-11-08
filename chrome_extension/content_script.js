@@ -66,7 +66,21 @@ If Senate Republicans follow the path of their House counterparts, he could be f
     showSummary(hardcodedArticle, title);
 }
 
+function showLoadingAnimation() {
+    var img = document.createElement('img');
+    img.id = "TLDR_loading_image";
+    img.style.cssText = "position: fixed; z-index: 2000000000; top: 47%; left: 47%;";
+    img.src = chrome.extension.getURL("circle-loading-animation.gif");
+    document.body.appendChild(img);
+}
+
+function hideLoadingAnimation() {
+    var img = document.getElementById("TLDR_loading_image");
+    img.style.display = "none";
+}
+
 function requestSummary() {
+    showLoadingAnimation();
     sendRequest(document.URL);
 }
 
@@ -83,6 +97,7 @@ function makeUl(summaryText) {
 }
 
 function showSummary(summary, title) {
+    hideLoadingAnimation();
     var newDiv = document.createElement('div');
     newDiv.id = "TLDR_blanket";
     newDiv.className="tb-container";
