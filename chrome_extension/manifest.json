@@ -1,28 +1,29 @@
 {
     "manifest_version": 2,
 
-    "name": "News Article Summarizer",
+    "name": "TLDR: News Article Summarizer",
     "description": "This extension allows you to summarize news articles.",
     "version": "1.0",
     "background": {
-	"scripts": ["background.js"],
-	"persistent": false
+	    "scripts": ["background.js"],
+	    "persistent": false
     },
     "permissions": [
-	"declarativeContent",
-	"http://www.nytimes.com/*",
-	"http://news.yahoo.com/*",
-    "http://localhost:8000/*",
-	"tabs"
+	    "declarativeContent",
+	    "http://www.nytimes.com/*",
+	    "http://news.yahoo.com/*",
+        "http://localhost:8000/*",
+        "http://news-article-summarizer.herokuapp.com/*",
+	    "tabs"
     ],
 
-     "web_accessible_resources": [
-    "circle-loading-animation.gif"
-  ],
+    "web_accessible_resources": [
+        "circle-loading-animation.gif"
+    ],
 
     "page_action": {
-	"default_icon": "icon.png",
-	"default_title": "We're on a news site"
+	    "default_icon": "icon.png",
+	    "default_title": "We're on a news site"
     }
 
 

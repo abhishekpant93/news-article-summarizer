@@ -1,41 +1,38 @@
-
 handleSummaryDisplay();
-
-
 
 function handleSummaryDisplay() {
     var summaryDiv = document.getElementById("TLDR_blanket");
     if(summaryDiv == null) {
-	requestSummary();
+	    requestSummary();
     }
     else {
-	flipSummaryDisplay(summaryDiv);
+	    flipSummaryDisplay(summaryDiv);
     }
 }
 
 function flipSummaryDisplay(div) {
     if(div.style["display"] == "none") {
-	div.style["display"] = "initial";
+	    div.style["display"] = "initial";
     }
     else(div.style.display = "none");
 }
 
 function sendRequest(url) {
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:8000/summary_api/", true);
+    xhr.open("POST", "http://news-article-summarizer.herokuapp.com/summary_api/", true);
     xhr.onreadystatechange = function() {
-	if (xhr.readyState == 4 && xhr.status == 200) {
-	    var summary = xhr.responseText;
-        arr = summary.split('@');
-        title = 'Summary';
-        if(arr.length > 1) {
-            title = arr[0];
-            summary = arr[1];
-            console.log('title: ' + title);
-            console.log('summary: ' + summary);
-        }
-	    showSummary(summary, title);
-	}
+	    if (xhr.readyState == 4 && xhr.status == 200) {
+	        var summary = xhr.responseText;
+            arr = summary.split('@');
+            title = 'Summary';
+            if(arr.length > 1) {
+                title = arr[0];
+                summary = arr[1];
+                console.log('title: ' + title);
+                console.log('summary: ' + summary);
+            }
+	        showSummary(summary, title);
+	    }
     }
     var pos = url.indexOf(".html");
     if(pos != -1)
@@ -57,10 +54,10 @@ If Senate Republicans follow the path of their House counterparts, he could be f
     var titleArr = document.getElementsByClassName('headline');
     var title = "";
     if(titleArr.length != 0) {
-	title = titleArr[0].innerText;
+	    title = titleArr[0].innerText;
     }
     else {
-	title = "Summary title goes here";
+	    title = "Summary title goes here";
     }
     
     showSummary(hardcodedArticle, title);
@@ -88,9 +85,9 @@ function makeUl(summaryText) {
     var ret = '<ul style="list-style-type: lower-greek;">';
     sentenceArr = summaryText.split('~');
     for(i = 0; i < sentenceArr.length; i++) {
-	ret += '<li>';
-	ret += sentenceArr[i];
-	ret += '</li>';
+	    ret += '<li>';
+	    ret += sentenceArr[i];
+	    ret += '</li>';
     }
     ret += "</ul>";
     return ret;
@@ -128,9 +125,9 @@ text-align: justify;\
 
 
     newDiv.onclick = function(event){
-	var wid = event.clientX, scrWid = document.body.clientWidth;
-	if (wid < scrWid*0.25 || wid > scrWid*0.75)
-	    this.style['display'] = "none";	
+	    var wid = event.clientX, scrWid = document.body.clientWidth;
+	    if (wid < scrWid*0.25 || wid > scrWid*0.75)
+	        this.style['display'] = "none";	
     }
     newDiv.innerHTML = html;
     var styleString = "\
