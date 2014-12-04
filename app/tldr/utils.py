@@ -29,18 +29,19 @@ class CombinedSummarizer():
 		w_c = 0.0
 		w_d = 1.0
 
-		a = PageRankSummarizer.summarize(document)
-		b = LuhnSummarizer.summarize(document)
-		c = CommunitySummarizer.summarize(document)
+		#a = PageRankSummarizer.summarize(document)
+		#b = LuhnSummarizer.summarize(document)
+		#c = CommunitySummarizer.summarize(document)
 		d = KeyPhraseSummarizer.summarize(document)
 
-		sentences = [sentence[0] for sentence in a]
-		a_score = [w_a * score[1] for score in a]
-		b_score = [w_b * score[1] for score in b]
-		c_score = [w_c * score[1] for score in c]
+		sentences = [sentence[0] for sentence in d]
+		#a_score = [w_a * score[1] for score in a]
+		#b_score = [w_b * score[1] for score in b]
+		#c_score = [w_c * score[1] for score in c]
 		d_score = [w_d * score[1] for score in d]
-		combined_score = [sa + sb + sc + sd for sa,sb,sc,sd in zip(a_score,b_score,c_score,d_score)]
-
+		#combined_score = [sa + sb + sc + sd for sa,sb,sc,sd in zip(a_score,b_score,c_score,d_score)]
+                combined_score = d_score
+                
 		final_sentences_and_score = zip(sentences, combined_score)
 		final_sentences_and_score = sorted(final_sentences_and_score, key=lambda tup: tup[1], reverse=True)
 
@@ -65,7 +66,7 @@ class ArticleExtractor():
 
 	@staticmethod
 	def parse(url):
-		page = requests.get(url, proxies = proxies)
+		page = requests.get(url) #, proxies = proxies)
 		g = goose.Goose()
 		#article = g.extract(url=url)
 		article = g.extract(raw_html = page.text)
