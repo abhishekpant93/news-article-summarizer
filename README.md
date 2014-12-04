@@ -1,24 +1,28 @@
-TLDR - News Article Summarizer
-==============================
-#### Speech and Natural Language Processing - Term Project
-#### IIT Kharagpur
+TL;DR News: Automatic Summarization of News Articles
+=====================================================
 
-Tool for automatic summarization of news articles
+Uses a combination of graph-based algorithms and semantic similarity measures (from WordNet) to perform extractive summarization.
 
-Setup and Requirements
+Requirements
 ----------------------
-* You need to install the following python packages:
-
-    * [NetworkX](https://networkx.github.io/)
-    * [NLTK](http://www.nltk.org/)
-    * [NumPy](http://www.numpy.org/)
-    * [scikit-learn](http://scikit-learn.org/stable/)
-    * [Python-Goose - Article Extractor](https://github.com/grangier/python-goose)
+  * [NetworkX](https://networkx.github.io/)
+  * [NLTK](http://www.nltk.org/)
+  * [NumPy](http://www.numpy.org/)
+  * [scikit-learn](http://scikit-learn.org/stable/)
+  * [Goose](https://github.com/grangier/python-goose)
+  * [Django](https://docs.djangoproject.com/en/1.7/intro/install/)
 
 Usage
 -----
-Run the django application inside the [app](https://github.com/ujaiswaliit/news-article-summarizer/tree/master/app) folder by executing  
-`python manage.py runserver`
+#### Web App
+The TLDR summarizer web app is now hosted [here] (http://news-article-summarizer.herokuapp.com/)
+
+#### Chrome Extension
+The browser extension is available for download from the Chrome Webstore [here] (#). Currently supports only [NYTimes]("http://www.nytimes.com/").
+     
+#### Testing
+Run the django app inside the [app](https://github.com/abhishekpant93/news-article-summarizer/tree/master/app) folder by executing  
+     `python manage.py runserver`
 
 Developers
 ----------
