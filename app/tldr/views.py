@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
-from tldr.utils import PageRankSummarizer, LuhnSummarizer, KeyPhraseSummarizer, CommunitySummarizer, ArticleExtractor, CombinedSummarizer
+#from tldr.utils import PageRankSummarizer, LuhnSummarizer, KeyPhraseSummarizer, CommunitySummarizer, ArticleExtractor, CombinedSummarizer
+from tldr.utils import KeyPhraseSummarizer, ArticleExtractor, CombinedSummarizer
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
