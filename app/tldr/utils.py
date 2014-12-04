@@ -1,7 +1,10 @@
 import networkx as nx
 import numpy as np
-import nltk
 import math
+
+import nltk
+nltk.data.path.append('/app/app/nltk_data/')
+
 from nltk.tokenize import sent_tokenize 
 from nltk.tokenize import word_tokenize
 from nltk.tokenize.punkt import PunktSentenceTokenizer
