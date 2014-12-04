@@ -3,7 +3,7 @@
 
     "name": "TLDR: News Article Summarizer",
     "description": "This extension allows you to summarize news articles.",
-    "version": "1.0",
+    "version": "0.1",
     "background": {
 	    "scripts": ["background.js"],
 	    "persistent": false
