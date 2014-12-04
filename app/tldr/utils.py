@@ -5,7 +5,7 @@ import math
 from nltk.tokenize import sent_tokenize 
 from nltk.tokenize import word_tokenize
 from nltk.tokenize.punkt import PunktSentenceTokenizer
-from sklearn.feature_extraction.text import TfidfTransformer, CountVectorizer
+#from sklearn.feature_extraction.text import TfidfTransformer, CountVectorizer
   
 from nltk.corpus import stopwords
 from nltk.stem.lancaster import LancasterStemmer
