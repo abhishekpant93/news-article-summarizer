@@ -1,6 +1,6 @@
 TLDR - News Article Summarizer
 ==============================
-#### Speech and Natural Language - Term Project
+#### Speech and Natural Language Processing - Term Project
 #### IIT Kharagpur
 
 Tool for automatic summarization of news articles
@@ -17,15 +17,15 @@ Setup and Requirements
 
 Usage
 -----
-Run the django application inside the [app](https://github.com/ujaiswaliit/news-article-summarizer/tree/master/app) folder by running  
+Run the django application inside the [app](https://github.com/ujaiswaliit/news-article-summarizer/tree/master/app) folder by executing  
 `python manage.py runserver`
 
 Developers
 ----------
-Utkarsh Jaiswal (Group Leader)  
+Abhishek Pant  
 Aniruddha Gupta  
 Ankit Jain  
 Bhaskar Bagchi  
 Shushman Chowdhary  
-Abhishek Pant  
 Rishi Rajiv Mehta  
+Utkarsh Jaiswal
