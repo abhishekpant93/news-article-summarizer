@@ -3,7 +3,7 @@ import numpy as np
 import math
 
 import nltk
-nltk.data.path.append('./nltk_data/')
+nltk.data.path.append('/app/app/nltk_data/')
 
 from nltk.tokenize import sent_tokenize 
 from nltk.tokenize import word_tokenize
