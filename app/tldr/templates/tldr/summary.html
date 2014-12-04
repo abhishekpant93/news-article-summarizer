@@ -8,14 +8,14 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="description" content="TLDR News Summarizer">
 		<meta name="keywords" content="News article summarizer, Speech and Natural Language Processing">
-		<meta name="author" content="Group 6">
+		<!-- <meta name="author" content="Group 6"> -->
 
 		<!-- Bootstrap core CSS -->
 		<link href="{% static 'tldr/css/bootstrap.min.css' %}" rel="stylesheet">
 		<!-- Custom CSS -->
 		<link href="{% static 'tldr/css/style.css' %}" rel="stylesheet">
 		<title>
-			TLDR News Summarizer
+			TLDR News
 		</title>
 	</head>
 
@@ -29,12 +29,12 @@
 			        <span class="icon-bar"></span>
 			        <span class="icon-bar"></span>
 			      </button>
-			      <a class="navbar-brand" href="{% url 'tldr:index' %}" >TLDR News Summarizer</a>
+			      <a class="navbar-brand" href="{% url 'tldr:index' %}" >TLDR: News Article Summarizer</a>
 			    </div>
 
 			    <div class="collapse navbar-collapse" id="navbar-collapse">
 			      <ul class="nav navbar-nav navbar-right">
-			      <li id="about_item" class=""><a id="about" onclick="$('#aboutModal').modal()" href="#">About</a></li>
+			      <li id="about_item" class=""><a id="about" onclick="$('#aboutModal').modal()" href="#">Team</a></li>
 			      </ul>
 			    </div><!-- /.navbar-collapse -->
 			</div><!-- /.container-fluid -->
@@ -49,17 +49,16 @@
 		        <h4 class="modal-title" id="aboutModalLabel">TLDR News Summarizer</h4>
 		      </div>
 		      <div class="modal-body">
-		        <b>Speech and Natural Language Processing project</b>
+		        <b>Developed by:</b>
 		       <p>
-		        	Group 6: <br>
 		        	<ul>
-		        		<li><h6>Utkarsh Jaiswal (Group Leader)</h6></li>
+		        		<li><h6>Abhishek Pant</h6></li>
 		        		<li><h6>Aniruddha Gupta</h6></li>
 		        		<li><h6>Ankit Jain</h6></li>
 		        		<li><h6>Bhaskar Bagchi</h6></li>
-		        		<li><h6>Shushman Chowdhary</h6></li>
-		        		<li><h6>Abhishek Pant</h6></li>
 		        		<li><h6>Rishi Rajiv Mehta</h6></li>
+		        		<li><h6>Shushman Chowdhary</h6></li>		        		
+		        		<li><h6>Utkarsh Jaiswal</h6></li>
 		        	</ul>
 		        </p>
 		      </div>
