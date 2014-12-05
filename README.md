@@ -18,7 +18,7 @@ Usage
 The TLDR summarizer web app is now hosted [here] (http://news-article-summarizer.herokuapp.com/)
 
 #### Chrome Extension
-The browser extension is available for download from the Chrome Webstore [here] (#). Currently supports only [NYTimes]("http://www.nytimes.com/").
+The browser extension is available for download from the Chrome Webstore [here] (https://chrome.google.com/webstore/detail/tldr-news-article-summari/omnkfiggdjenoclnfdhijodllleflpjk). Currently supports only [NYTimes]("http://www.nytimes.com/").
      
 #### Testing
 Run the django app inside the [app](https://github.com/abhishekpant93/news-article-summarizer/tree/master/app) folder by executing  
