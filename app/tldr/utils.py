@@ -37,32 +37,62 @@ class CombinedSummarizer():
 		#c = CommunitySummarizer.summarize(document)
 		d = KeyPhraseSummarizer.summarize(document)
 
-		sentences = [sentence[0] for sentence in d]
+		sentences = [s[0] for s in d]
 		#a_score = [w_a * score[1] for score in a]
 		#b_score = [w_b * score[1] for score in b]
 		#c_score = [w_c * score[1] for score in c]
 		d_score = [w_d * score[1] for score in d]
 		#combined_score = [sa + sb + sc + sd for sa,sb,sc,sd in zip(a_score,b_score,c_score,d_score)]
                 combined_score = d_score
-                
-		final_sentences_and_score = zip(sentences, combined_score)
-		final_sentences_and_score = sorted(final_sentences_and_score, key=lambda tup: tup[1], reverse=True)
 
+                # use sentence indices for chronological ordering
+		final_sentences_and_score = zip(xrange(len(sentences)), combined_score)
+                
+                #sort by score 
+		final_sentences_and_score = sorted(final_sentences_and_score, key=lambda tup: tup[1], reverse=True)
+                
 		K = len(final_sentences_and_score)
 
-		summary = []
-		if K > 5:
-			summary = [final_sentences_and_score[i][0] for i in xrange(5)]
-		else:
-			summary = [final_sentences_and_score[i][0] for i in xrange(1 + K / 3)]
+                # take top L sentences
+                L = 5 if K > 5 else 1 + K / 3
+                final_sentences_and_score = final_sentences_and_score[0:L]
+                
+                # always add the first sentence
+                contains_first = False
+                for s in final_sentences_and_score:
+                        if s[0] == 0:
+                                contains_first = True
+                                break
+
+                if not contains_first:
+                        s = final_sentences_and_score[-1]
+                        final_sentences_and_score.append((0, s[1]))
+                
+                # now sort top L sentences chronologically
+                final_sentences_and_score = sorted(final_sentences_and_score, key=lambda tup: tup[0])
+
+                # get the sentences from the indices
+                summary = [sentences[s[0]] for s in final_sentences_and_score]
 
 		return summary
 
 
 class ArticleExtractor():
 
+        @staticmethod
+        def replace_unicode_chars(str):
+                str = str.replace(u"\u201d","\"")
+                str = str.replace(u"\u201c", "\"")
+                str = str.replace(u"\u2019", "'")
+                str = str.replace(u"\u2018", "'")
+                str = str.replace(u"\u2014", " ")
+                # str = str.replace("\'", "")
+                # str = str.replace("\"", "")
+                return str
+
 	@staticmethod
 	def filter_unicode(str):
+                str = ArticleExtractor.replace_unicode_chars(str)
 		str = str.encode('ascii', 'ignore')
 		str = str.replace("\n", " ")
 		return str
