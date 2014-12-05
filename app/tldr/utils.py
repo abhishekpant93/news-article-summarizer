@@ -85,7 +85,7 @@ class ArticleExtractor():
                 str = str.replace(u"\u201c", "\"")
                 str = str.replace(u"\u2019", "'")
                 str = str.replace(u"\u2018", "'")
-                str = str.replace(u"\u2014", " ")
+                str = str.replace(u"\u2014", "-")
                 # str = str.replace("\'", "")
                 # str = str.replace("\"", "")
                 return str
